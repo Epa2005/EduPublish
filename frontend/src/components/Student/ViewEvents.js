@@ -8,6 +8,7 @@ function ViewEvents() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [fullscreenImg, setFullscreenImg] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -40,7 +41,7 @@ function ViewEvents() {
         </div>
       );
     }
-    return <img className="event-img" src={src} alt={event.title} />;
+    return <img className="event-img" src={src} alt={event.title} style={{ cursor: 'pointer' }} onClick={() => setFullscreenImg(src)} />;
   };
 
   return (
@@ -91,6 +92,14 @@ function ViewEvents() {
               </div>
             </article>
           ))}
+        </div>
+      )}
+
+      {fullscreenImg && (
+        <div className="modal-overlay-modern" onClick={() => setFullscreenImg(null)} style={{ cursor: 'zoom-out' }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ maxWidth: '95vw', maxHeight: '95vh' }}>
+            <img src={fullscreenImg} alt="Full screen" style={{ maxWidth: '100%', maxHeight: '95vh', borderRadius: 8, boxShadow: '0 0 40px rgba(0,0,0,0.5)', display: 'block' }} />
+          </div>
         </div>
       )}
     </div>

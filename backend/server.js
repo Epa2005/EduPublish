@@ -8,11 +8,13 @@ const teacherRoutes = require('./routes/teacher');
 const eventRoutes = require('./routes/events');
 const noteRoutes = require('./routes/notes');
 const announcementsRoutes = require('./routes/announcements');
+const contactRoutes = require('./routes/contact');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Auto-seed admin account on first run
+
 const seed = require('./scripts/seed');
 seed();
 
@@ -29,12 +31,33 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
+const mimeTypes = {
+  '.pdf': 'application/pdf',
+  '.doc': 'application/msword',
+  '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  '.ppt': 'application/vnd.ms-powerpoint',
+  '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  '.xls': 'application/vnd.ms-excel',
+  '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.mp4': 'video/mp4',
+  '.webm': 'video/webm',
+  '.ogg': 'video/ogg',
+};
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.pdf')) {
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', 'inline');
+    const ext = path.extname(filePath).toLowerCase();
+    if (mimeTypes[ext]) {
+      res.setHeader('Content-Type', mimeTypes[ext]);
     }
+    // Force inline disposition so browsers try to display the file instead of downloading
+    res.setHeader('Content-Disposition', 'inline');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
   }
 }));
 
@@ -43,6 +66,7 @@ app.use('/api/teacher', teacherRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/notes', noteRoutes);
 app.use('/api/announcements', announcementsRoutes);
+app.use('/api/contact', contactRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'School Activity System API is running.' });

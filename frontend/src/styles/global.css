@@ -1,5 +1,5 @@
 /* ============================================
-   EduPublish - Complete E-Learning Design System
+   Upcoming TVT Schooll - Complete E-Learning Design System
    ============================================ */
 
 :root {
@@ -590,9 +590,9 @@ input, select, textarea { font-family: inherit; }
    HERO
    ============================================ */
 .hero-modern {
-  background: linear-gradient(135deg, #0d0221 0%, #1a0533 30%, #2d0a3e 60%, #1a0533 100%);
+  background-color: #0d0221;
   color: var(--white);
-  padding: 100px 24px 80px;
+  padding: 120px 24px 100px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -602,10 +602,7 @@ input, select, textarea { font-family: inherit; }
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse at 15% 50%, rgba(167, 139, 250, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 30%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 85%, rgba(244, 114, 182, 0.06) 0%, transparent 50%);
+  background: rgba(0, 0, 0, 0.1);
   pointer-events: none;
 }
 
@@ -1316,6 +1313,8 @@ input, select, textarea { font-family: inherit; }
 .btn-modern-warning { background: var(--accent); color: var(--white); }
 .btn-modern-warning:hover { background: var(--accent-dark); transform: translateY(-1px); }
 .btn-modern-sm { padding: 6px 14px; font-size: 13px; }
+.btn-modern-outline { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+.btn-modern-outline:hover { background: var(--primary-bg); color: var(--primary-dark); border-color: var(--primary-dark); transform: translateY(-1px); }
 
 /* ============================================
    MODAL

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { notesAPI } from '../../services/api';
-import PreviewModal from '../Common/PreviewModal';
 import { t } from '../../i18n/i18n';
+import PreviewModal from '../Common/PreviewModal';
 
 const API_BASE = (process.env.REACT_APP_API_URL || 'http://localhost:5000').replace(/\/api\/?$/, '');
 
@@ -15,12 +15,6 @@ function getFileBadge(url) {
   return { label: 'File', cls: 'file-badge-other' };
 }
 
-function getFileName(url) {
-  if (!url) return '';
-  const parts = url.split('/');
-  return parts[parts.length - 1];
-}
-
 function StudentNotes() {
   const [notes, setNotes] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -28,11 +22,10 @@ function StudentNotes() {
   const [selectedSubject, setSelectedSubject] = useState('');
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+
+  // Preview state
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewSrc, setPreviewSrc] = useState('');
-  const [previewType, setPreviewType] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
-  const [previewFileName, setPreviewFileName] = useState('');
+  const [previewData, setPreviewData] = useState({ src: '', title: '', fileName: '' });
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -58,14 +51,14 @@ function StudentNotes() {
     setFiltered(result);
   }, [selectedSubject, search, notes]);
 
+  const getFileUrl = (note) => `${API_BASE}${note.file_url}`;
+
   const handlePreview = (note) => {
-    const src = `${API_BASE}${note.file_url}`;
-    const isPdf = note.file_url?.toLowerCase().endsWith('.pdf');
-    const isVideo = note.file_url?.toLowerCase().match(/\.(mp4|webm|ogg|mov)$/);
-    setPreviewSrc(src);
-    setPreviewType(isPdf ? 'application/pdf' : isVideo ? 'video/mp4' : '');
-    setPreviewTitle(note.title);
-    setPreviewFileName(getFileName(note.file_url));
+    setPreviewData({
+      src: getFileUrl(note),
+      title: note.title,
+      fileName: note.file_url.split('/').pop()
+    });
     setPreviewOpen(true);
   };
 
@@ -130,10 +123,10 @@ function StudentNotes() {
                   {note.uploaded_by_name || t('notes.teacher')} &middot; {new Date(note.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                 </div>
                 <div className="note-actions">
-                  <button className="btn-preview-primary" onClick={() => handlePreview(note)}>
+                  <button onClick={() => handlePreview(note)} className="btn-preview-primary" style={{ cursor: 'pointer', border: 'none' }}>
                     {'\u{1F50D}'} {t('notes.preview')}
                   </button>
-                  <a href={`${API_BASE}${note.file_url}`} className="btn-download-outline" target="_blank" rel="noopener noreferrer">
+                  <a href={getFileUrl(note)} className="btn-download-outline" download>
                     {'\u{1F4E5}'}
                   </a>
                 </div>
@@ -146,11 +139,11 @@ function StudentNotes() {
       <PreviewModal
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
-        src={previewSrc}
-        type={previewType}
-        title={previewTitle}
-        fileName={previewFileName}
+        src={previewData.src}
+        title={previewData.title}
+        fileName={previewData.fileName}
       />
+
     </div>
   );
 }

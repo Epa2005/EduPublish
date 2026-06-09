@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { adminAPI, eventsAPI, notesAPI } from '../../services/api';
+import { adminAPI, eventsAPI, notesAPI, contactAPI } from '../../services/api';
 
 function AdminDashboard() {
-  const [stats, setStats] = useState({ teachers: 0, events: 0, notes: 0 });
+  const [stats, setStats] = useState({ teachers: 0, events: 0, notes: 0, messages: 0 });
   const [recentEvents, setRecentEvents] = useState([]);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [teachersRes, eventsRes, notesRes] = await Promise.all([
+        const [teachersRes, eventsRes, notesRes, messagesRes] = await Promise.all([
           adminAPI.getTeachers(),
           eventsAPI.getAll(),
           notesAPI.getAll(),
+          contactAPI.getAll(),
         ]);
-        console.log('admin stats responses', { teachersRes: teachersRes.data, eventsRes: eventsRes.data?.length, notesRes: notesRes.data?.length });
         setStats({
           teachers: teachersRes.data.length,
           events: eventsRes.data.length,
           notes: notesRes.data.length,
+          messages: messagesRes.data.filter((m) => !m.is_read).length,
         });
         setRecentEvents(eventsRes.data.slice(0, 5));
       } catch (err) {
@@ -49,6 +50,11 @@ function AdminDashboard() {
           <div className="stat-number">{stats.notes}</div>
           <div className="stat-label">Notes</div>
         </div>
+        <Link to="/admin/messages" className="stat-card-admin" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <div className="stat-icon">&#x1F4EC;</div>
+          <div className="stat-number">{stats.messages}</div>
+          <div className="stat-label">Messages {stats.messages > 0 ? '\u{1F534}' : ''}</div>
+        </Link>
       </div>
       <div className="card-modern">
         <h3 style={{ marginBottom: 16, fontSize: 18, fontWeight: 700 }}>Recent Events</h3>

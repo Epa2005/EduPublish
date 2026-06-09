@@ -1,8 +1,8 @@
--- School Activity Publishing and Learning Management System
--- Database: schooldb
+-- Upcoming TVT Schooll Activity Publishing and Learning Management System
+-- Database: tvtdb
 
-CREATE DATABASE IF NOT EXISTS schooldb;
-USE schooldb;
+CREATE DATABASE IF NOT EXISTS tvtdb;
+USE tvtdb;
 
 -- Admin Table
 CREATE TABLE IF NOT EXISTS admin (
@@ -56,6 +56,16 @@ CREATE TABLE IF NOT EXISTS student_notes (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (uploaded_by) REFERENCES teachers(teacher_id) ON DELETE SET NULL
+);
+
+-- Contact Messages Table (submitted via the About page contact form)
+CREATE TABLE IF NOT EXISTS contact_messages (
+  message_id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  message TEXT NOT NULL,
+  is_read TINYINT(1) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Default admin is auto-created by the backend seed script on first run.

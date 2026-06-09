@@ -121,7 +121,12 @@ function TeacherNotes() {
                 <button className="btn-modern btn-modern-warning" style={{ marginRight: 8, padding: '6px 14px', fontSize: 13 }} onClick={() => openEdit(note)}>Edit</button>
                 <button className="btn-modern btn-modern-danger" style={{ padding: '6px 14px', fontSize: 13 }} onClick={() => handleDelete(note.note_id)}>Delete</button>
                 <a href={`${apiBase}${note.file_url}`} className="btn-download" target="_blank" rel="noopener noreferrer">&#x1F4E5; Download</a>
-                <button className="btn-preview" onClick={() => { setPreviewSrc(`${apiBase}${note.file_url}`); setPreviewType(note.file_url?.toLowerCase().endsWith('.pdf') ? 'application/pdf' : ''); setPreviewOpen(true); }}>Preview</button>
+                <button className="btn-preview" onClick={() => { 
+                  setPreviewSrc(`${apiBase}${note.file_url}`); 
+                  setPreviewType(note.file_url?.toLowerCase().endsWith('.pdf') ? 'application/pdf' : ''); 
+                  setPreviewData({ title: note.title, fileName: note.file_url.split('/').pop() });
+                  setPreviewOpen(true); 
+                }}>Preview</button>
               </div>
             </div>
           ))}
@@ -164,7 +169,7 @@ function TeacherNotes() {
         </div>
       )}
 
-      <PreviewModal open={previewOpen} onClose={() => setPreviewOpen(false)} src={previewSrc} type={previewType} title="Preview" />
+      <PreviewModal open={previewOpen} onClose={() => setPreviewOpen(false)} src={previewSrc} type={previewType} title={previewData.title} fileName={previewData.fileName} />
     </div>
   );
 }

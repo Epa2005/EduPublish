@@ -43,7 +43,7 @@ function Navbar() {
       <div className="navbar-inner">
         <Link to="/" className="navbar-brand">
           <span className="brand-icon">{'\u{1F3EB}'}</span>
-          <span className="brand-text">Edu<span className="brand-highlight">Publish</span></span>
+          <span className="brand-text">Upcoming TVT <span className="brand-highlight">Schooll</span></span>
         </Link>
         <button className={`menu-toggle ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(!menuOpen)}>
           <span></span><span></span><span></span>

@@ -38,13 +38,13 @@ function App() {
           <div className="container">
             <div className="footer-grid">
               <div className="footer-col">
-                <span className="footer-brand">{'\u{1F3EB}'} EduPublish</span>
-                <p>School Activity Publishing and Learning Management System. Connecting schools, teachers, and students through modern technology.</p>
+                <span className="footer-brand">{'\u{1F3EB}'} Upcoming TVT Schooll</span>
+                <p>Upcoming TVT Schooll Activity Publishing and Learning Management System. Connecting Upcoming TVT Schooll, teachers, students, and the community of Bukomane through modern technology.</p>
                 <div className="footer-social">
                   <a href="#" title="Facebook">f</a>
                   <a href="#" title="Twitter">{'\u{1D54F}'}</a>
                   <a href="#" title="LinkedIn">in</a>
-                  <a href="#" title="YouTube">{'\u25B6'}</a>
+                  <a href="#" title="YouTube">{'\u25B6}'}</a>
                 </div>
               </div>
               <div className="footer-col">
@@ -68,14 +68,14 @@ function App() {
               <div className="footer-col">
                 <h4>Contact</h4>
                 <ul>
-                  <li><a href="mailto:support@edupublish.edu">support@edupublish.edu</a></li>
-                  <li><a href="tel:+15551234567">+1 (555) 123-4567</a></li>
+                  <li><a href="mailto:info@tvtschool.edu.rw">info@tvtschool.edu.rw</a></li>
+                  <li><a href="tel:+250788888888">+250 788 888 888</a></li>
                   <li><a href="/about#contact">Send a Message</a></li>
                 </ul>
               </div>
             </div>
             <div className="footer-bottom">
-              &copy; {new Date().getFullYear()} EduPublish. All rights reserved. Built with {'\u2764\uFE0F'} for education.
+              &copy; {new Date().getFullYear()} Upcoming TVT Schooll. All rights reserved. Built with {'\u2764\uFE0F'} for Upcoming TVT Schooll Community.
             </div>
           </div>
         </footer>

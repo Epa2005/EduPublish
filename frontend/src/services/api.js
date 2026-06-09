@@ -67,4 +67,10 @@ export const notesAPI = {
   delete: (id) => api.delete(`/notes/${id}`),
 };
 
+export const contactAPI = {
+  send: (data) => api.post('/contact', data),
+  getAll: () => api.get('/contact'),
+  markRead: (id) => api.put(`/contact/${id}/read`),
+};
+
 export default api;

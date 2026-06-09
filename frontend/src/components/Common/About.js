@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { t } from '../../i18n/i18n';
+import { contactAPI } from '../../services/api';
 
 function About() {
   const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' });
@@ -12,11 +13,16 @@ function About() {
     { title: 'Secure Management', desc: 'Admin and teacher portals with secure authentication for content management.' },
   ];
 
-  const handleContactSubmit = (e) => {
+  const handleContactSubmit = async (e) => {
     e.preventDefault();
-    setContactSent(true);
-    setContactForm({ name: '', email: '', message: '' });
-    setTimeout(() => setContactSent(false), 5000);
+    try {
+      await contactAPI.send(contactForm);
+      setContactSent(true);
+      setContactForm({ name: '', email: '', message: '' });
+      setTimeout(() => setContactSent(false), 5000);
+    } catch (err) {
+      console.error('Failed to send message:', err);
+    }
   };
 
   return (
@@ -77,28 +83,28 @@ function About() {
                   <div className="contact-item-icon">{'\u2709'}</div>
                   <div className="contact-item-text">
                     <h4>{t('about.email')}</h4>
-                    <a href="mailto:support@edupublish.edu">support@edupublish.edu</a>
+                    <a href="mailto:info@tvtschool.edu.rw">info@tvtschool.edu.rw</a>
                   </div>
                 </div>
                 <div className="contact-item">
                   <div className="contact-item-icon">{'\u{1F4DE}'}</div>
                   <div className="contact-item-text">
                     <h4>{t('about.phone')}</h4>
-                    <p>+1 (555) 123-4567</p>
+                    <p>+250 788 888 888</p>
                   </div>
                 </div>
                 <div className="contact-item">
                   <div className="contact-item-icon">{'\u{1F4CD}'}</div>
                   <div className="contact-item-text">
                     <h4>{t('about.location')}</h4>
-                    <p>123 Education Lane, Learning City, ED 10001</p>
+                    <p>Bukomane Village, Gitoki Sector, Gatsibo District, Eastern Province</p>
                   </div>
                 </div>
                 <div className="contact-item">
                   <div className="contact-item-icon">{'\u{1F464}'}</div>
                   <div className="contact-item-text">
                     <h4>{t('about.author')}</h4>
-                    <p>{t('about.authorDesc')}</p>
+                    <p>Upcoming TVT Schooll - Built with love for education</p>
                   </div>
                 </div>
               </div>

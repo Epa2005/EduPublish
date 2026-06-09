@@ -10,6 +10,7 @@ function Home() {
   const [notes, setNotes] = useState([]);
   const [stats, setStats] = useState({ events: 0, notes: 0 });
   const [loading, setLoading] = useState(true);
+  const [fullscreenImg, setFullscreenImg] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,12 +45,20 @@ function Home() {
         </div>
       );
     }
-    return <img className="event-img" src={src} alt={event.title} />;
+    return <img className="event-img" src={src} alt={event.title} style={{ cursor: 'pointer' }} onClick={() => setFullscreenImg(src)} />;
   };
 
   return (
     <div>
-      <section className="hero-modern">
+      <section 
+        className="hero-modern" 
+        style={{ 
+          backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.65)), url('/photo.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
         <div className="container">
           <div className="hero-badge">
             <span>{'\u{1F3C6}'}</span> {t('home.heroBadge')}
@@ -213,12 +222,20 @@ function Home() {
             <Link to="/about#contact" className="btn-modern btn-modern-primary" style={{ padding: '14px 36px', fontSize: 16 }}>
               {'\u2709'} {t('home.contactUs')}
             </Link>
-            <a href="mailto:support@edupublish.edu" className="btn-modern" style={{ padding: '14px 36px', fontSize: 16, border: '2px solid var(--primary)', color: 'var(--primary)', background: 'transparent' }}>
+            <a href="mailto:info@tvtschool.edu.rw" className="btn-modern" style={{ padding: '14px 36px', fontSize: 16, border: '2px solid var(--primary)', color: 'var(--primary)', background: 'transparent' }}>
               {'\u{1F4E7}'} {t('home.emailSupport')}
             </a>
           </div>
         </div>
       </section>
+
+      {fullscreenImg && (
+        <div className="modal-overlay-modern" onClick={() => setFullscreenImg(null)} style={{ cursor: 'zoom-out' }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ maxWidth: '95vw', maxHeight: '95vh' }}>
+            <img src={fullscreenImg} alt="Full screen" style={{ maxWidth: '100%', maxHeight: '95vh', borderRadius: 8, boxShadow: '0 0 40px rgba(0,0,0,0.5)', display: 'block' }} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
