@@ -1,7 +1,7 @@
 {
   "name": "school-activity-system-backend",
   "version": "1.0.0",
-  "description": "Upcoming TVT Schooll - School Activity Publishing and Learning Management System - Backend",
+  "description": "Upcoming TVT School - School Activity Publishing and Learning Management System - Backend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

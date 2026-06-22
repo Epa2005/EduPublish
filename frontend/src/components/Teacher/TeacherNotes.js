@@ -151,8 +151,8 @@ function TeacherNotes() {
                 </div>
               </div>
               <div className="form-group-modern">
-                <label>File (PDF, DOC)</label>
-                <input className="form-control-modern" style={{ padding: '10px 14px' }} type="file" accept=".pdf,.doc,.docx" onChange={(e) => setForm({ ...form, file: e.target.files[0] })} required={!editing} />
+                <label>File (PDF, DOC, etc.)</label>
+                <input className="form-control-modern" style={{ padding: '10px 14px' }} type="file" onChange={(e) => setForm({ ...form, file: e.target.files[0] })} required={!editing} />
               </div>
               {uploadProgress > 0 && (
                 <div style={{ marginBottom: 12 }}>

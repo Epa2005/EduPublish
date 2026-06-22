@@ -2,11 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { adminAPI, eventsAPI, notesAPI, contactAPI } from '../../services/api';
 
+const hours = new Date().getHours();
+const greeting = hours < 12 ? 'Good Morning' : hours < 18 ? 'Good Afternoon' : 'Good Evening';
+
+const statCards = [
+  { key: 'teachers', icon: '\u{1F468}\u200D\u{1F3EB}', label: 'Teachers', color: '#7c3aed', bg: 'rgba(124,58,237,0.1)' },
+  { key: 'events', icon: '\u{1F4C5}', label: 'Events', color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
+  { key: 'notes', icon: '\u{1F4DA}', label: 'Notes', color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
+  { key: 'messages', icon: '\u{1F4EC}', label: 'Messages', color: '#ef4444', bg: 'rgba(239,68,68,0.1)' },
+];
+
+const quickActions = [
+  { to: '/admin/teachers', icon: '\u{1F465}', label: 'Manage Teachers', desc: 'Add, edit or remove teachers' },
+  { to: '/admin/events', icon: '\u{1F4C5}', label: 'Manage Events', desc: 'Create and publish school events' },
+  { to: '/admin/announcements', icon: '\u{1F4E2}', label: 'Announcements', desc: 'Post announcements' },
+  { to: '/admin/messages', icon: '\u{1F4ED}', label: 'Messages', desc: 'View contact messages' },
+];
+
 function AdminDashboard() {
+  const [user, setUser] = useState(null);
   const [stats, setStats] = useState({ teachers: 0, events: 0, notes: 0, messages: 0 });
   const [recentEvents, setRecentEvents] = useState([]);
 
   useEffect(() => {
+    const u = JSON.parse(localStorage.getItem('user'));
+    setUser(u);
     const fetchStats = async () => {
       try {
         const [teachersRes, eventsRes, notesRes, messagesRes] = await Promise.all([
@@ -30,58 +50,74 @@ function AdminDashboard() {
   }, []);
 
   return (
-    <div className="container" style={{ paddingTop: 32, paddingBottom: 64 }}>
-      <div className="page-header-modern">
-        <h2>Admin Dashboard</h2>
+    <div className="dashboard-page">
+      <div className="dashboard-header">
+        <div className="dashboard-welcome">
+          <h1>{greeting}, {user?.full_name || 'Admin'}</h1>
+          <p>Here is what is happening at your school today.</p>
+        </div>
+        <div className="dashboard-date">
+          <span className="dash-date-icon">{'\u{1F4C5}'}</span>
+          <span>{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+        </div>
       </div>
-      <div className="stats-grid-admin">
-        <div className="stat-card-admin">
-          <div className="stat-icon">&#x1F468;&#x200D;&#x1F3EB;</div>
-          <div className="stat-number">{stats.teachers}</div>
-          <div className="stat-label">Teachers</div>
-        </div>
-        <div className="stat-card-admin">
-          <div className="stat-icon">&#x1F4C5;</div>
-          <div className="stat-number">{stats.events}</div>
-          <div className="stat-label">Events</div>
-        </div>
-        <div className="stat-card-admin">
-          <div className="stat-icon">&#x1F4DA;</div>
-          <div className="stat-number">{stats.notes}</div>
-          <div className="stat-label">Notes</div>
-        </div>
-        <Link to="/admin/messages" className="stat-card-admin" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <div className="stat-icon">&#x1F4EC;</div>
-          <div className="stat-number">{stats.messages}</div>
-          <div className="stat-label">Messages {stats.messages > 0 ? '\u{1F534}' : ''}</div>
-        </Link>
+
+      <div className="dash-stats-grid">
+        {statCards.map((s) => (
+          <Link key={s.key} to={s.key === 'messages' ? '/admin/messages' : '#'} className="dash-stat-card" style={{ textDecoration: 'none' }}>
+            <div className="dash-stat-icon" style={{ background: s.bg, color: s.color }}>
+              <span>{s.icon}</span>
+            </div>
+            <div className="dash-stat-info">
+              <span className="dash-stat-number">{stats[s.key]}</span>
+              <span className="dash-stat-label">{s.label}</span>
+            </div>
+            <div className="dash-stat-trend" style={{ background: s.bg, color: s.color }}>
+              {s.key === 'messages' && stats.messages > 0 ? `${stats.messages} unread` : 'View all'}
+            </div>
+          </Link>
+        ))}
       </div>
-      <div className="card-modern">
-        <h3 style={{ marginBottom: 16, fontSize: 18, fontWeight: 700 }}>Recent Events</h3>
-        {recentEvents.length === 0 ? (
-          <p style={{ color: '#64748b' }}>No events yet.</p>
-        ) : (
-          <table className="table-modern">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
+
+      <div className="dash-two-col">
+        <div className="dash-card">
+          <div className="dash-card-header">
+            <h3><span className="dash-card-icon">{'\u{26A1}'}</span> Quick Actions</h3>
+          </div>
+          <div className="dash-actions-grid">
+            {quickActions.map((a) => (
+              <Link key={a.to} to={a.to} className="dash-action-card">
+                <div className="dash-action-icon">{a.icon}</div>
+                <div className="dash-action-info">
+                  <strong>{a.label}</strong>
+                  <span>{a.desc}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div className="dash-card">
+          <div className="dash-card-header">
+            <h3><span className="dash-card-icon">{'\u{1F4C5}'}</span> Recent Events</h3>
+            <Link to="/admin/events" className="dash-view-link">View all {'\u2192'}</Link>
+          </div>
+          {recentEvents.length === 0 ? (
+            <div className="dash-empty">No events yet.</div>
+          ) : (
+            <div className="dash-list">
               {recentEvents.map((event) => (
-                <tr key={event.event_id}>
-                  <td>{event.title}</td>
-                  <td>{new Date(event.created_at).toLocaleDateString()}</td>
-                </tr>
+                <div className="dash-list-item" key={event.event_id}>
+                  <div className="dash-list-dot" />
+                  <div className="dash-list-content">
+                    <strong>{event.title}</strong>
+                    <span>{new Date(event.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-      <div style={{ marginTop: 20, display: 'flex', gap: 12 }}>
-        <Link to="/admin/teachers" className="btn-modern btn-modern-outline">Manage Teachers</Link>
-        <Link to="/admin/events" className="btn-modern btn-modern-outline">Manage Events</Link>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -43,7 +43,7 @@ function Navbar() {
       <div className="navbar-inner">
         <Link to="/" className="navbar-brand">
           <span className="brand-icon">{'\u{1F3EB}'}</span>
-          <span className="brand-text">Upcoming TVT <span className="brand-highlight">Schooll</span></span>
+          <span className="brand-text">Upcoming TVT <span className="brand-highlight">School</span></span>
         </Link>
         <button className={`menu-toggle ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(!menuOpen)}>
           <span></span><span></span><span></span>
@@ -53,7 +53,7 @@ function Navbar() {
           <Link to="/events" className={isActive('/events')} onClick={() => setMenuOpen(false)}>{t('nav.events')}</Link>
           <Link to="/notes" className={isActive('/notes')} onClick={() => setMenuOpen(false)}>{t('nav.studyNotes')}</Link>
           <Link to="/about" className={isActive('/about')} onClick={() => setMenuOpen(false)}>{t('nav.about')}</Link>
-          <Link to="/about#contact" className="nav-link" onClick={() => setMenuOpen(false)}>{t('nav.contact')}</Link>
+          <Link to="/contact" className={isActive('/contact')} onClick={() => setMenuOpen(false)}>{t('nav.contact')}</Link>
           <button className="lang-toggle" onClick={toggleLang} title={getLang() === 'en' ? 'Kinyarwanda' : 'English'}>
             {getLang() === 'en' ? 'RW' : 'EN'}
           </button>

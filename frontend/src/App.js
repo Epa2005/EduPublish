@@ -38,8 +38,8 @@ function App() {
           <div className="container">
             <div className="footer-grid">
               <div className="footer-col">
-                <span className="footer-brand">{'\u{1F3EB}'} Upcoming TVT Schooll</span>
-                <p>Upcoming TVT Schooll Activity Publishing and Learning Management System. Connecting Upcoming TVT Schooll, teachers, students, and the community of Bukomane through modern technology.</p>
+                <span className="footer-brand">{'\u{1F3EB}'} Upcoming TVT School</span>
+                <p>Upcoming TVT School Activity Publishing and Learning Management System. Connecting Upcoming TVT School, teachers, students, and the community of Bukomane through modern technology.</p>
                 <div className="footer-social">
                   <a href="#" title="Facebook">f</a>
                   <a href="#" title="Twitter">{'\u{1D54F}'}</a>
@@ -61,7 +61,7 @@ function App() {
                 <ul>
                   <li><a href="/notes">Learning Materials</a></li>
                   <li><a href="/events">School Calendar</a></li>
-                  <li><a href="/about#contact">Contact Support</a></li>
+                  <li><a href="/contact">Contact Support</a></li>
                   <li><a href="/about">FAQ</a></li>
                 </ul>
               </div>
@@ -70,12 +70,12 @@ function App() {
                 <ul>
                   <li><a href="mailto:info@tvtschool.edu.rw">info@tvtschool.edu.rw</a></li>
                   <li><a href="tel:+250788888888">+250 788 888 888</a></li>
-                  <li><a href="/about#contact">Send a Message</a></li>
+                  <li><a href="/contact">Send a Message</a></li>
                 </ul>
               </div>
             </div>
             <div className="footer-bottom">
-              &copy; {new Date().getFullYear()} Upcoming TVT Schooll. All rights reserved. Built with {'\u2764\uFE0F'} for Upcoming TVT Schooll Community.
+              &copy; {new Date().getFullYear()} Upcoming TVT School. All rights reserved. Built with {'\u2764\uFE0F'} for Upcoming TVT School Community.
             </div>
           </div>
         </footer>

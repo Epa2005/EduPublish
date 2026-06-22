@@ -1,4 +1,4 @@
--- Upcoming TVT Schooll Activity Publishing and Learning Management System
+-- Upcoming TVT School Activity Publishing and Learning Management System
 -- Database: tvtdb
 
 CREATE DATABASE IF NOT EXISTS tvtdb;

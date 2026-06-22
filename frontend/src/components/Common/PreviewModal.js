@@ -14,17 +14,27 @@ function canPreviewNative(src) {
   return Object.values(VIEWABLE_TYPES).some((r) => r.test(lower));
 }
 
+const OFFICE_EXTS = ['.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx'];
+
+function getOfficeViewerUrl(src) {
+  if (!src) return src;
+  return `https://docs.google.com/viewer?url=${encodeURIComponent(src)}&embedded=false`;
+}
+
 export default function PreviewModal({ open, onClose, src, type, title, fileName }) {
   const [loadError, setLoadError] = useState(false);
   const [textContent, setTextContent] = React.useState('');
 
   const lower = src?.toLowerCase() || '';
+  const ext = '.' + (lower.split('.').pop() || '');
   const isImage = VIEWABLE_TYPES.image.test(lower);
   const isVideo = VIEWABLE_TYPES.video.test(lower);
   const isAudio = VIEWABLE_TYPES.audio.test(lower);
   const isPdf = VIEWABLE_TYPES.pdf.test(lower);
   const isText = VIEWABLE_TYPES.text.test(lower);
-  const previewable = canPreviewNative(src);
+  const isOffice = OFFICE_EXTS.includes(ext);
+  const previewable = canPreviewNative(src) || isOffice;
+  const openUrl = isOffice ? getOfficeViewerUrl(src) : src;
 
   React.useEffect(() => {
     if (open && isText && src) {
@@ -46,7 +56,7 @@ export default function PreviewModal({ open, onClose, src, type, title, fileName
             {fileName && <span style={{ fontSize: 13, color: 'var(--gray-400)', marginLeft: 8 }}>{fileName}</span>}
           </div>
           <div className="preview-toolbar-actions">
-            <a href={src} target="_blank" rel="noopener noreferrer" className="preview-download-btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
+            <a href={openUrl} target="_blank" rel="noopener noreferrer" className="preview-download-btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
               {'\u{1F517}'} {t('common.openNewTab')}
             </a>
             <a href={src} download className="preview-download-btn" style={{ marginLeft: 8, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
@@ -88,6 +98,15 @@ export default function PreviewModal({ open, onClose, src, type, title, fileName
           ) : isPdf ? (
             <div>
               <iframe src={src} title={title || 'PDF Preview'} className="preview-frame" style={{ minHeight: '75vh', width: '100%', border: 'none', borderRadius: 8 }} onError={() => setLoadError(true)} />
+            </div>
+          ) : isOffice ? (
+            <div>
+              <iframe
+                src={`https://docs.google.com/viewer?url=${encodeURIComponent(src)}&embedded=true`}
+                title={title || 'Office Document Preview'}
+                className="preview-frame"
+                style={{ minHeight: '75vh', width: '100%', border: 'none', borderRadius: 8 }}
+              />
             </div>
           ) : isText ? (
             <div style={{ padding: 24, maxHeight: '75vh', overflowY: 'auto' }}>

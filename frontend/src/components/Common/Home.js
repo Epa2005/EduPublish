@@ -219,7 +219,7 @@ function Home() {
             <p>{t('home.questionsDesc')}</p>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
-            <Link to="/about#contact" className="btn-modern btn-modern-primary" style={{ padding: '14px 36px', fontSize: 16 }}>
+            <Link to="/contact" className="btn-modern btn-modern-primary" style={{ padding: '14px 36px', fontSize: 16 }}>
               {'\u2709'} {t('home.contactUs')}
             </Link>
             <a href="mailto:info@tvtschool.edu.rw" className="btn-modern" style={{ padding: '14px 36px', fontSize: 16, border: '2px solid var(--primary)', color: 'var(--primary)', background: 'transparent' }}>
