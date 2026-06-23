@@ -68,6 +68,17 @@ CREATE TABLE IF NOT EXISTS contact_messages (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Staff Members Table (displayed on the About page)
+CREATE TABLE IF NOT EXISTS staff_members (
+  staff_id INT PRIMARY KEY AUTO_INCREMENT,
+  full_name VARCHAR(150) NOT NULL,
+  position VARCHAR(255) NOT NULL,
+  photo VARCHAR(255),
+  display_order INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 -- Default admin is auto-created by the backend seed script on first run.
 -- Username: admin
 -- Password: admin123

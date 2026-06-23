@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { t } from '../../i18n/i18n';
 
+const API_BASE = (process.env.REACT_APP_API_URL || 'http://localhost:5000').replace(/\/api\/?$/, '');
+
 function About() {
-  const features = Array.isArray(t('features')) ? t('features') : [
-    { title: 'School Events', desc: 'Stay updated with all school activities, events, and announcements published by the administration.' },
-    { title: 'Study Materials', desc: 'Teachers upload notes and learning resources for students to download and study anytime.' },
-    { title: 'For Everyone', desc: 'Open access for students, parents, and the community to view school publications.' },
-    { title: 'Secure Management', desc: 'Admin and teacher portals with secure authentication for content management.' },
-  ];
+  const [staff, setStaff] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/staff`)
+      .then((res) => res.json())
+      .then((data) => setStaff(data))
+      .catch(() => {});
+  }, []);
+
+  const features = Array.isArray(t('features')) ? t('features') : [];
 
   return (
     <div className="about-page">
@@ -31,6 +37,31 @@ function About() {
               </div>
             ))}
           </div>
+        </section>
+        <section className="about-section">
+          <h2>{t('about.ourStaff')}</h2>
+          <p>{t('about.ourStaffDesc')}</p>
+          {staff.length === 0 ? (
+            <p style={{ color: 'var(--gray-400)', textAlign: 'center', padding: 32 }}>{t('about.noStaffYet')}</p>
+          ) : (
+            <div className="staff-grid">
+              {staff.map((m) => (
+                <div className="staff-card" key={m.staff_id}>
+                  <div className="staff-photo">
+                    {m.photo ? (
+                      <img src={`${API_BASE}${m.photo}`} alt={m.full_name} />
+                    ) : (
+                      <span className="staff-photo-placeholder">{m.full_name.charAt(0)}</span>
+                    )}
+                  </div>
+                  <div className="staff-info">
+                    <h4>{m.full_name}</h4>
+                    <p>{m.position}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
         <section className="about-section">
           <h2>{t('about.whoWeServe')}</h2>

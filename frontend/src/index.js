@@ -9,6 +9,7 @@ import ManageTeachers from './components/Admin/ManageTeachers';
 import ManageEvents from './components/Admin/ManageEvents';
 import ManageAnnouncements from './components/Admin/ManageAnnouncements';
 import ManageMessages from './components/Admin/ManageMessages';
+import AdminStaff from './components/Admin/AdminStaff';
 import TeacherDashboard from './components/Teacher/TeacherDashboard';
 import TeacherNotes from './components/Teacher/TeacherNotes';
 import StudentNotes from './components/Student/StudentNotes';
@@ -36,6 +37,7 @@ const router = createBrowserRouter(
         { path: '/admin/events', element: <ProtectedRoute role="admin"><ManageEvents /></ProtectedRoute> },
         { path: '/admin/announcements', element: <ProtectedRoute role="admin"><ManageAnnouncements /></ProtectedRoute> },
         { path: '/admin/messages', element: <ProtectedRoute role="admin"><ManageMessages /></ProtectedRoute> },
+        { path: '/admin/staff', element: <ProtectedRoute role="admin"><AdminStaff /></ProtectedRoute> },
         { path: '/teacher/dashboard', element: <ProtectedRoute role="teacher"><TeacherDashboard /></ProtectedRoute> },
         { path: '/teacher/notes', element: <ProtectedRoute role="teacher"><TeacherNotes /></ProtectedRoute> },
       ],

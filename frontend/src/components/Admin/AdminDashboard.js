@@ -17,6 +17,7 @@ const quickActions = [
   { to: '/admin/events', icon: '\u{1F4C5}', label: 'Manage Events', desc: 'Create and publish school events' },
   { to: '/admin/announcements', icon: '\u{1F4E2}', label: 'Announcements', desc: 'Post announcements' },
   { to: '/admin/messages', icon: '\u{1F4ED}', label: 'Messages', desc: 'View contact messages' },
+  { to: '/admin/staff', icon: '\u{1F465}', label: 'Manage Staff', desc: 'Add and manage staff members' },
 ];
 
 function AdminDashboard() {

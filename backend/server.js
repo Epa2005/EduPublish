@@ -9,6 +9,7 @@ const eventRoutes = require('./routes/events');
 const noteRoutes = require('./routes/notes');
 const announcementsRoutes = require('./routes/announcements');
 const contactRoutes = require('./routes/contact');
+const staffRoutes = require('./routes/staff');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -85,6 +86,7 @@ app.use('/api/events', eventRoutes);
 app.use('/api/notes', noteRoutes);
 app.use('/api/announcements', announcementsRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/staff', staffRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'School Activity System API is running.' });
