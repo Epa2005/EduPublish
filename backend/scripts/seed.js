@@ -3,6 +3,17 @@ const db = require('../config/db');
 
 async function seed() {
   try {
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS staff_members (
+        staff_id INT PRIMARY KEY AUTO_INCREMENT,
+        full_name VARCHAR(150) NOT NULL,
+        position VARCHAR(255) NOT NULL,
+        photo VARCHAR(255),
+        display_order INT DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
     // Check if admin exists
     const [rows] = await db.query('SELECT COUNT(*) AS count FROM admin');
     if (rows[0].count === 0) {

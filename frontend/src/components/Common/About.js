@@ -9,7 +9,7 @@ function About() {
   useEffect(() => {
     fetch(`${API_BASE}/api/staff`)
       .then((res) => res.json())
-      .then((data) => setStaff(data))
+      .then((data) => { if (Array.isArray(data)) setStaff(data); })
       .catch(() => {});
   }, []);
 
