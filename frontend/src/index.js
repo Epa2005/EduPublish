@@ -15,6 +15,7 @@ import StudentNotes from './components/Student/StudentNotes';
 import ViewEvents from './components/Student/ViewEvents';
 import About from './components/Common/About';
 import Contact from './components/Common/Contact';
+import Announcements from './components/Common/Announcements';
 import ProtectedRoute from './components/Common/ProtectedRoute';
 import './styles/global.css';
 
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
         { path: '/notes', element: <StudentNotes /> },
         { path: '/about', element: <About /> },
         { path: '/contact', element: <Contact /> },
+        { path: '/announcements', element: <Announcements /> },
         { path: '/admin/dashboard', element: <ProtectedRoute role="admin"><AdminDashboard /></ProtectedRoute> },
         { path: '/admin/teachers', element: <ProtectedRoute role="admin"><ManageTeachers /></ProtectedRoute> },
         { path: '/admin/events', element: <ProtectedRoute role="admin"><ManageEvents /></ProtectedRoute> },

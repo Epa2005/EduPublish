@@ -6,7 +6,7 @@ const hours = new Date().getHours();
 const greeting = hours < 12 ? 'Good Morning' : hours < 18 ? 'Good Afternoon' : 'Good Evening';
 
 const statCards = [
-  { key: 'teachers', icon: '\u{1F468}\u200D\u{1F3EB}', label: 'Teachers', color: '#7c3aed', bg: 'rgba(124,58,237,0.1)' },
+  { key: 'teachers', icon: '\u{1F393}', label: 'Teachers', color: '#7c3aed', bg: 'rgba(124,58,237,0.1)' },
   { key: 'events', icon: '\u{1F4C5}', label: 'Events', color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
   { key: 'notes', icon: '\u{1F4DA}', label: 'Notes', color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
   { key: 'messages', icon: '\u{1F4EC}', label: 'Messages', color: '#ef4444', bg: 'rgba(239,68,68,0.1)' },

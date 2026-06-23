@@ -73,7 +73,7 @@ function Login() {
               className={`login-tab-modern ${activeTab === 'admin' ? 'active' : ''}`}
               onClick={() => setActiveTab('admin')}
             >
-              <span className="tab-icon">{'\u{1F468}\u200D\u{1F4BB}'}</span>
+              <span className="tab-icon">{'\u{2699}'}</span>
               {t('login.admin')}
             </button>
             <button
