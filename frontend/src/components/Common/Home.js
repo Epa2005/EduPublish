@@ -51,14 +51,18 @@ function Home() {
   return (
     <div>
       <section 
-        className="hero-modern" 
+        className="hero-modern hero-image-bg" 
         style={{ 
-          backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.65)), url('/photo.png')`,
+          backgroundImage: `linear-gradient(135deg, rgba(15, 23, 42, 0.55) 0%, rgba(13, 148, 136, 0.35) 50%, rgba(15, 23, 42, 0.4) 100%), url('/photo.png')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed'
         }}
       >
+        <div className="hero-orb hero-orb-1"></div>
+        <div className="hero-orb hero-orb-2"></div>
+        <div className="hero-orb hero-orb-3"></div>
         <div className="container">
           <div className="hero-badge">
             <span>{'\u{1F3C6}'}</span> {t('home.heroBadge')}

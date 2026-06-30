@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { eventsAPI } from '../../services/api';
+import { t } from '../../i18n/i18n';
 
 function ManageEvents() {
   const [events, setEvents] = useState([]);
@@ -16,7 +17,7 @@ function ManageEvents() {
       const res = await eventsAPI.getAll();
       setEvents(res.data);
     } catch (err) {
-      setMessage({ type: 'error', text: 'Failed to fetch events.' });
+      setMessage({ type: 'error', text: t('admin.events.fetchFailed') });
     } finally {
       setLoading(false);
     }
@@ -31,28 +32,28 @@ function ManageEvents() {
     try {
       if (editing) {
         await eventsAPI.update(editing.event_id, formData);
-        setMessage({ type: 'success', text: 'Event updated.' });
+        setMessage({ type: 'success', text: t('admin.events.eventUpdated') });
       } else {
         await eventsAPI.create(formData);
-        setMessage({ type: 'success', text: 'Event created.' });
+        setMessage({ type: 'success', text: t('admin.events.eventCreated') });
       }
       setShowModal(false);
       setEditing(null);
       setForm({ title: '', description: '', image: null });
       fetchEvents();
     } catch (err) {
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Operation failed.' });
+      setMessage({ type: 'error', text: err.response?.data?.message || t('admin.events.operationFailed') });
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this event?')) return;
+    if (!window.confirm(t('admin.events.deleteConfirm'))) return;
     try {
       await eventsAPI.delete(id);
-      setMessage({ type: 'success', text: 'Event deleted.' });
+      setMessage({ type: 'success', text: t('admin.events.deleteFailed') });
       fetchEvents();
     } catch (err) {
-      setMessage({ type: 'error', text: 'Delete failed.' });
+      setMessage({ type: 'error', text: t('admin.events.deleteFailed') });
     }
   };
 
@@ -68,51 +69,24 @@ function ManageEvents() {
     setShowModal(true);
   };
 
-  const renderMedia = (mediaPath) => {
-    if (!mediaPath) return null;
-    const lower = mediaPath.toLowerCase();
-    const base = (process.env.REACT_APP_API_URL || 'http://localhost:5000').replace(/\/api\/?$/, '');
-    const src = `${base}${mediaPath}`;
-    if (lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.endsWith('.ogg') || lower.endsWith('.mov')) {
-      return (
-        <div className="media-card">
-          <div className="media-wrapper">
-            <video className="media-content" controls>
-              <source src={src} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-            <div className="media-overlay">Video</div>
-          </div>
-        </div>
-      );
-    }
-    return (
-      <div className="media-card">
-        <div className="media-wrapper">
-          <img className="media-content" src={src} alt="event media" />
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="container" style={{ paddingTop: 32, paddingBottom: 64 }}>
       <div className="page-header-modern">
-        <h2>Manage Events</h2>
+        <h2>{t('admin.events.title')}</h2>
         <button className="btn-modern btn-modern-primary" onClick={openCreate}>
-          &#x2795; Create Event
+          &#x2795; {t('admin.events.create')}
         </button>
       </div>
       {message.text && (
         <div className={`alert-modern alert-modern-${message.type}`}>{message.text}</div>
       )}
       {loading ? (
-        <div className="loading-modern">Loading events...</div>
+        <div className="loading-modern">{t('admin.events.loading')}</div>
       ) : events.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">&#x1F4C5;</div>
-          <h3>No events</h3>
-          <p>Create your first event to publish on the school website.</p>
+          <h3>{t('admin.events.noEvents')}</h3>
+          <p>{t('admin.events.noEventsDesc')}</p>
         </div>
       ) : (
         <div className="event-grid-modern">
@@ -138,9 +112,9 @@ function ManageEvents() {
                 </div>
                 <div>
                   <button className="btn-modern btn-modern-warning" style={{ marginRight: 8, padding: '6px 14px', fontSize: 13 }}
-                    onClick={() => openEdit(event)}>Edit</button>
+                    onClick={() => openEdit(event)}>{t('admin.events.editBtn')}</button>
                   <button className="btn-modern btn-modern-danger" style={{ padding: '6px 14px', fontSize: 13 }}
-                    onClick={() => handleDelete(event.event_id)}>Delete</button>
+                    onClick={() => handleDelete(event.event_id)}>{t('admin.events.deleteBtn')}</button>
                 </div>
               </div>
             </div>
@@ -151,32 +125,32 @@ function ManageEvents() {
       {showModal && (
         <div className="modal-overlay-modern" onClick={() => setShowModal(false)}>
           <div className="modal-modern" onClick={(e) => e.stopPropagation()}>
-            <h3>{editing ? 'Edit Event' : 'Create Event'}</h3>
+            <h3>{editing ? t('admin.events.edit') : t('admin.events.create')}</h3>
             <form onSubmit={handleSubmit}>
               <div className="form-group-modern">
-                <label>Title</label>
+                <label>{t('admin.events.titleLabel')}</label>
                 <div className="input-wrapper">
                   <input className="form-control-modern" style={{ paddingLeft: 14 }} type="text"
-                    value={form.title} placeholder="Event title"
+                    value={form.title} placeholder={t('admin.events.titlePlaceholder')}
                     onChange={(e) => setForm({ ...form, title: e.target.value })} required />
                 </div>
               </div>
               <div className="form-group-modern">
-                <label>Description</label>
+                <label>{t('admin.events.descriptionLabel')}</label>
                 <textarea className="form-control-modern" style={{ paddingLeft: 14, minHeight: 100, resize: 'vertical' }}
-                  value={form.description} placeholder="Describe the event..."
+                  value={form.description} placeholder={t('admin.events.descriptionPlaceholder')}
                   onChange={(e) => setForm({ ...form, description: e.target.value })} />
               </div>
               <div className="form-group-modern">
-                <label>Media (image/video)</label>
+                <label>{t('admin.events.mediaLabel')}</label>
                 <input className="form-control-modern" style={{ padding: '10px 14px' }} type="file" accept="image/*,video/*"
                   onChange={(e) => setForm({ ...form, image: e.target.files[0] })} />
               </div>
               <div className="modal-actions-modern">
                 <button type="button" className="btn-modern" style={{ background: '#f1f5f9', color: '#334155' }}
-                  onClick={() => setShowModal(false)}>Cancel</button>
+                  onClick={() => setShowModal(false)}>{t('admin.events.cancel')}</button>
                 <button type="submit" className="btn-modern btn-modern-primary">
-                  {editing ? 'Update' : 'Create'}
+                  {editing ? t('admin.events.update') : t('admin.events.createBtn')}
                 </button>
               </div>
             </form>

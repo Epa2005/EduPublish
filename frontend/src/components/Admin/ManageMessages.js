@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { contactAPI } from '../../services/api';
+import { t } from '../../i18n/i18n';
 
 function ManageMessages() {
   const [messages, setMessages] = useState([]);
@@ -35,20 +36,20 @@ function ManageMessages() {
   return (
     <div className="container" style={{ paddingTop: 32, paddingBottom: 64 }}>
       <div className="page-header-modern">
-        <h2>Contact Messages</h2>
+        <h2>{t('admin.messages.title')}</h2>
         <p style={{ color: 'var(--gray-400)', fontSize: 14, marginTop: 4 }}>
-          {messages.length} total
-          {unreadCount > 0 && ` \u00B7 ${unreadCount} unread`}
+          {messages.length} {t('admin.messages.total')}
+          {unreadCount > 0 && ` \u00B7 ${unreadCount} ${t('admin.messages.unread')}`}
         </p>
       </div>
 
       {loading ? (
-        <div className="loading-modern">Loading messages...</div>
+        <div className="loading-modern">{t('admin.messages.loading')}</div>
       ) : messages.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">{'\u{1F4EC}'}</div>
-          <h3>No messages yet</h3>
-          <p>Contact form submissions will appear here.</p>
+          <h3>{t('admin.messages.noMessages')}</h3>
+          <p>{t('admin.messages.noMessagesDesc')}</p>
         </div>
       ) : (
         <div className="messages-list">
@@ -67,9 +68,9 @@ function ManageMessages() {
                   <span style={{ fontSize: 12, color: 'var(--gray-400)' }}>
                     {new Date(msg.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </span>
-                  {!msg.is_read && (
+                    {!msg.is_read && (
                     <button className="btn-modern btn-modern-sm btn-modern-outline" onClick={() => handleMarkRead(msg.message_id)}>
-                      Mark Read
+                      {t('admin.messages.markRead')}
                     </button>
                   )}
                 </div>

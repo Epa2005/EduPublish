@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { staffAPI } from '../../services/api';
+import { t } from '../../i18n/i18n';
 
 const API_BASE = (process.env.REACT_APP_API_URL || 'http://localhost:5000').replace(/\/api\/?$/, '');
 
@@ -18,7 +19,7 @@ function AdminStaff() {
       const res = await staffAPI.getAll();
       setStaff(res.data);
     } catch (err) {
-      setMessage({ type: 'error', text: 'Failed to fetch staff members.' });
+      setMessage({ type: 'error', text: t('admin.staff.fetchFailed') });
     } finally {
       setLoading(false);
     }
@@ -34,28 +35,28 @@ function AdminStaff() {
     try {
       if (editing) {
         await staffAPI.update(editing.staff_id, formData);
-        setMessage({ type: 'success', text: 'Staff member updated.' });
+        setMessage({ type: 'success', text: t('admin.staff.updated') });
       } else {
         await staffAPI.create(formData);
-        setMessage({ type: 'success', text: 'Staff member created.' });
+        setMessage({ type: 'success', text: t('admin.staff.created') });
       }
       setShowModal(false);
       setEditing(null);
       setForm({ full_name: '', position: '', photo: null, display_order: 0 });
       fetchStaff();
     } catch (err) {
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Operation failed.' });
+      setMessage({ type: 'error', text: err.response?.data?.message || t('admin.staff.operationFailed') });
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this staff member?')) return;
+    if (!window.confirm(t('admin.staff.deleteConfirm'))) return;
     try {
       await staffAPI.delete(id);
-      setMessage({ type: 'success', text: 'Staff member deleted.' });
+      setMessage({ type: 'success', text: t('admin.staff.deleted') });
       fetchStaff();
     } catch (err) {
-      setMessage({ type: 'error', text: 'Delete failed.' });
+      setMessage({ type: 'error', text: t('admin.staff.deleteFailed') });
     }
   };
 
@@ -74,32 +75,33 @@ function AdminStaff() {
   return (
     <div className="container" style={{ paddingTop: 32, paddingBottom: 64 }}>
       <div className="page-header-modern">
-        <h2>Manage Staff</h2>
+        <h2>{t('admin.staff.title')}</h2>
         <button className="btn-modern btn-modern-primary" onClick={openCreate}>
-          &#x2795; Add Staff Member
+          &#x2795; {t('admin.staff.add')}
         </button>
       </div>
       {message.text && (
         <div className={`alert-modern alert-modern-${message.type}`}>{message.text}</div>
       )}
       {loading ? (
-        <div className="loading-modern">Loading staff...</div>
+        <div className="loading-modern">{t('admin.staff.loading')}</div>
       ) : staff.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">{'\u{1F465}'}</div>
-          <h3>No staff members</h3>
-          <p>Add your first staff member to display on the About page.</p>
+          <h3>{t('admin.staff.noStaff')}</h3>
+          <p>{t('admin.staff.noStaffDesc')}</p>
         </div>
       ) : (
         <div className="card-modern">
+          <div className="table-responsive">
           <table className="table-modern">
             <thead>
               <tr>
-                <th>Order</th>
-                <th>Photo</th>
-                <th>Full Name</th>
-                <th>Position</th>
-                <th>Actions</th>
+                <th>{t('admin.staff.order')}</th>
+                <th>{t('admin.staff.photo')}</th>
+                <th>{t('admin.staff.fullName')}</th>
+                <th>{t('admin.staff.position')}</th>
+                <th>{t('admin.staff.actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -117,40 +119,41 @@ function AdminStaff() {
                   <td>{m.position}</td>
                   <td>
                     <button className="btn-modern btn-modern-warning" style={{ marginRight: 8, padding: '6px 14px', fontSize: 13 }}
-                      onClick={() => openEdit(m)}>Edit</button>
+                      onClick={() => openEdit(m)}>{t('admin.staff.editBtn')}</button>
                     <button className="btn-modern btn-modern-danger" style={{ padding: '6px 14px', fontSize: 13 }}
-                      onClick={() => handleDelete(m.staff_id)}>Delete</button>
+                      onClick={() => handleDelete(m.staff_id)}>{t('admin.staff.deleteBtn')}</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
 
       {showModal && (
         <div className="modal-overlay-modern" onClick={() => setShowModal(false)}>
           <div className="modal-modern" onClick={(e) => e.stopPropagation()}>
-            <h3>{editing ? 'Edit Staff Member' : 'Add Staff Member'}</h3>
+            <h3>{editing ? t('admin.staff.edit') : t('admin.staff.add')}</h3>
             <form onSubmit={handleSubmit}>
               <div className="form-group-modern">
-                <label>Full Name</label>
+                <label>{t('admin.staff.fullNameLabel')}</label>
                 <div className="input-wrapper">
                   <input className="form-control-modern" style={{ paddingLeft: 14 }} type="text"
-                    value={form.full_name} placeholder="Enter full name"
+                    value={form.full_name} placeholder={t('admin.staff.fullNamePlaceholder')}
                     onChange={(e) => setForm({ ...form, full_name: e.target.value })} required />
                 </div>
               </div>
               <div className="form-group-modern">
-                <label>Position</label>
+                <label>{t('admin.staff.positionLabel')}</label>
                 <div className="input-wrapper">
                   <input className="form-control-modern" style={{ paddingLeft: 14 }} type="text"
-                    value={form.position} placeholder="e.g. Head Teacher, Director of Studies"
+                    value={form.position} placeholder={t('admin.staff.positionPlaceholder')}
                     onChange={(e) => setForm({ ...form, position: e.target.value })} required />
                 </div>
               </div>
               <div className="form-group-modern">
-                <label>Display Order</label>
+                <label>{t('admin.staff.displayOrder')}</label>
                 <div className="input-wrapper">
                   <input className="form-control-modern" style={{ paddingLeft: 14 }} type="number"
                     value={form.display_order} placeholder="0"
@@ -158,18 +161,18 @@ function AdminStaff() {
                 </div>
               </div>
               <div className="form-group-modern">
-                <label>Photo (optional)</label>
+                <label>{t('admin.staff.photoLabel')}</label>
                 <input className="form-control-modern" style={{ padding: '10px 14px' }} type="file" accept="image/*"
                   onChange={(e) => setForm({ ...form, photo: e.target.files[0] })} />
                 {editing && editing.photo && (
-                  <p style={{ fontSize: 12, color: 'var(--gray-500)', marginTop: 6 }}>Leave empty to keep current photo.</p>
+                  <p style={{ fontSize: 12, color: 'var(--gray-500)', marginTop: 6 }}>{t('admin.staff.photoHint')}</p>
                 )}
               </div>
               <div className="modal-actions-modern">
                 <button type="button" className="btn-modern" style={{ background: '#f1f5f9', color: '#334155' }}
-                  onClick={() => setShowModal(false)}>Cancel</button>
+                  onClick={() => setShowModal(false)}>{t('admin.staff.cancel')}</button>
                 <button type="submit" className="btn-modern btn-modern-primary">
-                  {editing ? 'Update' : 'Create'}
+                  {editing ? t('admin.staff.update') : t('admin.staff.createBtn')}
                 </button>
               </div>
             </form>

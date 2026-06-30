@@ -52,6 +52,7 @@ function Navbar() {
           <Link to="/" className={isActive('/')} onClick={() => setMenuOpen(false)}>{t('nav.home')}</Link>
           <Link to="/events" className={isActive('/events')} onClick={() => setMenuOpen(false)}>{t('nav.events')}</Link>
           <Link to="/notes" className={isActive('/notes')} onClick={() => setMenuOpen(false)}>{t('nav.studyNotes')}</Link>
+          <Link to="/announcements" className={isActive('/announcements')} onClick={() => setMenuOpen(false)}>{t('nav.announcements')}</Link>
           <Link to="/about" className={isActive('/about')} onClick={() => setMenuOpen(false)}>{t('nav.about')}</Link>
           <Link to="/contact" className={isActive('/contact')} onClick={() => setMenuOpen(false)}>{t('nav.contact')}</Link>
           <button className="lang-toggle" onClick={toggleLang} title={getLang() === 'en' ? 'Kinyarwanda' : 'English'}>

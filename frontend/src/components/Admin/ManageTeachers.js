@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { adminAPI } from '../../services/api';
+import { t } from '../../i18n/i18n';
 
 function ManageTeachers() {
   const [teachers, setTeachers] = useState([]);
@@ -18,7 +19,7 @@ function ManageTeachers() {
       const res = await adminAPI.getTeachers();
       setTeachers(res.data);
     } catch (err) {
-      setMessage({ type: 'error', text: 'Failed to fetch teachers.' });
+      setMessage({ type: 'error', text: t('admin.teachers.fetchFailed') });
     } finally {
       setLoading(false);
     }
@@ -28,131 +29,133 @@ function ManageTeachers() {
     e.preventDefault();
     try {
       await adminAPI.createTeacher(form);
-      setMessage({ type: 'success', text: 'Teacher created successfully.' });
+      setMessage({ type: 'success', text: t('admin.teachers.createdSuccess') });
       setShowModal(false);
       setForm({ full_name: '', email: '', password: '' });
       fetchTeachers();
     } catch (err) {
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to create teacher.' });
+      setMessage({ type: 'error', text: err.response?.data?.message || t('admin.teachers.createFailed') });
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this teacher?')) return;
+    if (!window.confirm(t('admin.teachers.deleteConfirm'))) return;
     try {
       await adminAPI.deleteTeacher(id);
-      setMessage({ type: 'success', text: 'Teacher deleted.' });
+      setMessage({ type: 'success', text: t('admin.teachers.deletedSuccess') });
       fetchTeachers();
     } catch (err) {
-      setMessage({ type: 'error', text: 'Failed to delete teacher.' });
+      setMessage({ type: 'error', text: t('admin.teachers.deleteFailed') });
     }
   };
 
   const handleResetPassword = async () => {
     try {
       await adminAPI.resetPassword(selectedTeacher.teacher_id, { new_password: resetPass });
-      setMessage({ type: 'success', text: 'Password reset successfully.' });
+      setMessage({ type: 'success', text: t('admin.teachers.resetSuccess') });
       setShowResetModal(false);
       setResetPass('');
     } catch (err) {
-      setMessage({ type: 'error', text: 'Failed to reset password.' });
+      setMessage({ type: 'error', text: t('admin.teachers.resetFailed') });
     }
   };
 
   return (
     <div className="container" style={{ paddingTop: 32, paddingBottom: 64 }}>
       <div className="page-header-modern">
-        <h2>Manage Teachers</h2>
+        <h2>{t('admin.teachers.title')}</h2>
         <button className="btn-modern btn-modern-primary" onClick={() => setShowModal(true)}>
-          &#x2795; Create Teacher
+          &#x2795; {t('admin.teachers.create')}
         </button>
       </div>
       {message.text && (
         <div className={`alert-modern alert-modern-${message.type}`}>{message.text}</div>
       )}
       {loading ? (
-        <div className="loading-modern">Loading teachers...</div>
+        <div className="loading-modern">{t('admin.teachers.loading')}</div>
       ) : teachers.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">&#x1F468;&#x200D;&#x1F3EB;</div>
-          <h3>No teachers</h3>
-          <p>Create your first teacher account to get started.</p>
+          <h3>{t('admin.teachers.noTeachers')}</h3>
+          <p>{t('admin.teachers.noTeachersDesc')}</p>
         </div>
       ) : (
         <div className="card-modern">
+          <div className="table-responsive">
           <table className="table-modern">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Created</th>
-                <th>Actions</th>
+                <th>{t('admin.teachers.id')}</th>
+                <th>{t('admin.teachers.fullName')}</th>
+                <th>{t('admin.teachers.email')}</th>
+                <th>{t('admin.teachers.created')}</th>
+                <th>{t('admin.teachers.actions')}</th>
               </tr>
             </thead>
             <tbody>
-              {teachers.map((t) => (
-                <tr key={t.teacher_id}>
-                  <td>{t.teacher_id}</td>
-                  <td>{t.full_name}</td>
-                  <td>{t.email}</td>
-                  <td>{new Date(t.created_at).toLocaleDateString()}</td>
+              {teachers.map((tchr) => (
+                <tr key={tchr.teacher_id}>
+                  <td>{tchr.teacher_id}</td>
+                  <td>{tchr.full_name}</td>
+                  <td>{tchr.email}</td>
+                  <td>{new Date(tchr.created_at).toLocaleDateString()}</td>
                   <td>
                     <button
                       className="btn-modern btn-modern-warning"
                       style={{ marginRight: 8, padding: '6px 14px', fontSize: 13 }}
-                      onClick={() => { setSelectedTeacher(t); setShowResetModal(true); }}
+                      onClick={() => { setSelectedTeacher(tchr); setShowResetModal(true); }}
                     >
-                      Reset Password
+                      {t('admin.teachers.resetPassword')}
                     </button>
                     <button
                       className="btn-modern btn-modern-danger"
                       style={{ padding: '6px 14px', fontSize: 13 }}
-                      onClick={() => handleDelete(t.teacher_id)}
+                      onClick={() => handleDelete(tchr.teacher_id)}
                     >
-                      Delete
+                      {t('admin.teachers.delete')}
                     </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
 
       {showModal && (
         <div className="modal-overlay-modern" onClick={() => setShowModal(false)}>
           <div className="modal-modern" onClick={(e) => e.stopPropagation()}>
-            <h3>Create Teacher Account</h3>
+            <h3>{t('admin.teachers.createAccount')}</h3>
             <form onSubmit={handleCreate}>
               <div className="form-group-modern">
-                <label>Full Name</label>
+                <label>{t('admin.teachers.fullNameLabel')}</label>
                 <div className="input-wrapper">
                   <input className="form-control-modern" style={{ paddingLeft: 14 }} type="text"
-                    value={form.full_name} placeholder="Enter full name"
+                    value={form.full_name} placeholder={t('admin.teachers.fullNamePlaceholder')}
                     onChange={(e) => setForm({ ...form, full_name: e.target.value })} required />
                 </div>
               </div>
               <div className="form-group-modern">
-                <label>Email</label>
+                <label>{t('admin.teachers.emailLabel')}</label>
                 <div className="input-wrapper">
                   <input className="form-control-modern" style={{ paddingLeft: 14 }} type="email"
-                    value={form.email} placeholder="Enter email address"
+                    value={form.email} placeholder={t('admin.teachers.emailPlaceholder')}
                     onChange={(e) => setForm({ ...form, email: e.target.value })} required />
                 </div>
               </div>
               <div className="form-group-modern">
-                <label>Password</label>
+                <label>{t('admin.teachers.passwordLabel')}</label>
                 <div className="input-wrapper">
                   <input className="form-control-modern" style={{ paddingLeft: 14 }} type="password"
-                    value={form.password} placeholder="Enter password"
+                    value={form.password} placeholder={t('admin.teachers.passwordPlaceholder')}
                     onChange={(e) => setForm({ ...form, password: e.target.value })} required />
                 </div>
               </div>
               <div className="modal-actions-modern">
                 <button type="button" className="btn-modern" style={{ background: '#f1f5f9', color: '#334155' }}
-                  onClick={() => setShowModal(false)}>Cancel</button>
-                <button type="submit" className="btn-modern btn-modern-primary">Create</button>
+                  onClick={() => setShowModal(false)}>{t('admin.teachers.cancel')}</button>
+                <button type="submit" className="btn-modern btn-modern-primary">{t('admin.teachers.createBtn')}</button>
               </div>
             </form>
           </div>
@@ -162,20 +165,20 @@ function ManageTeachers() {
       {showResetModal && (
         <div className="modal-overlay-modern" onClick={() => setShowResetModal(false)}>
           <div className="modal-modern" onClick={(e) => e.stopPropagation()}>
-            <h3>Reset Password</h3>
-            <p style={{ color: '#64748b', marginBottom: 20 }}>Reset password for <strong>{selectedTeacher?.full_name}</strong></p>
+            <h3>{t('admin.teachers.resetPasswordTitle')}</h3>
+            <p style={{ color: '#64748b', marginBottom: 20 }}>{t('admin.teachers.resetPasswordFor')} <strong>{selectedTeacher?.full_name}</strong></p>
             <div className="form-group-modern">
-              <label>New Password</label>
+              <label>{t('admin.teachers.newPasswordLabel')}</label>
               <div className="input-wrapper">
                 <input className="form-control-modern" style={{ paddingLeft: 14 }} type="password"
-                  value={resetPass} placeholder="Enter new password"
+                  value={resetPass} placeholder={t('admin.teachers.newPasswordPlaceholder')}
                   onChange={(e) => setResetPass(e.target.value)} required />
               </div>
             </div>
             <div className="modal-actions-modern">
               <button className="btn-modern" style={{ background: '#f1f5f9', color: '#334155' }}
-                onClick={() => setShowResetModal(false)}>Cancel</button>
-              <button className="btn-modern btn-modern-primary" onClick={handleResetPassword}>Reset</button>
+                onClick={() => setShowResetModal(false)}>{t('admin.teachers.cancel')}</button>
+              <button className="btn-modern btn-modern-primary" onClick={handleResetPassword}>{t('admin.teachers.resetBtn')}</button>
             </div>
           </div>
         </div>

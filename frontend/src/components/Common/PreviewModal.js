@@ -50,16 +50,16 @@ export default function PreviewModal({ open, onClose, src, type, title, fileName
   return (
     <div className="modal-overlay-modern" onClick={onClose}>
       <div className="modal-modern" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '92vw', width: 960 }}>
-        <div className="preview-toolbar">
+        <div className="preview-toolbar preview-toolbar-mobile">
           <div className="preview-toolbar-info">
             <h3>{title || t('common.preview')}</h3>
-            {fileName && <span style={{ fontSize: 13, color: 'var(--gray-400)', marginLeft: 8 }}>{fileName}</span>}
+            {fileName && <span className="preview-toolbar-filename">{fileName}</span>}
           </div>
           <div className="preview-toolbar-actions">
             <a href={openUrl} target="_blank" rel="noopener noreferrer" className="preview-download-btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
               {'\u{1F517}'} {t('common.openNewTab')}
             </a>
-            <a href={src} download className="preview-download-btn" style={{ marginLeft: 8, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
+            <a href={src} download className="preview-download-btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
               {'\u{1F4E5}'} {t('common.download')}
             </a>
             <button className="preview-close-btn" onClick={onClose}>{t('common.close')} {'\u2715'}</button>

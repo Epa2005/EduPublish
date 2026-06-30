@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api, { notesAPI } from '../../services/api';
 import PreviewModal from '../Common/PreviewModal';
+import { t } from '../../i18n/i18n';
 
 function TeacherNotes() {
   const [notes, setNotes] = useState([]);
@@ -13,6 +14,7 @@ function TeacherNotes() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewSrc, setPreviewSrc] = useState('');
   const [previewType, setPreviewType] = useState('');
+  const [previewData, setPreviewData] = useState({ title: '', fileName: '' });
 
   useEffect(() => { fetchNotes(); }, []);
 
@@ -21,7 +23,7 @@ function TeacherNotes() {
       const res = await notesAPI.getMyNotes();
       setNotes(res.data);
     } catch (err) {
-      setMessage({ type: 'error', text: 'Failed to fetch notes.' });
+      setMessage({ type: 'error', text: t('teacher.notes.fetchFailed') });
     } finally {
       setLoading(false);
     }
@@ -42,7 +44,7 @@ function TeacherNotes() {
             setUploadProgress(pct);
           }
         });
-        setMessage({ type: 'success', text: 'Note updated.' });
+        setMessage({ type: 'success', text: t('teacher.notes.noteUpdated') });
       } else {
         await api.post('/notes', formData, {
           onUploadProgress: (progressEvent) => {
@@ -50,7 +52,7 @@ function TeacherNotes() {
             setUploadProgress(pct);
           }
         });
-        setMessage({ type: 'success', text: 'Note uploaded.' });
+        setMessage({ type: 'success', text: t('teacher.notes.noteUploaded') });
       }
       setShowModal(false);
       setEditing(null);
@@ -58,19 +60,19 @@ function TeacherNotes() {
       setUploadProgress(0);
       fetchNotes();
     } catch (err) {
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Operation failed.' });
+      setMessage({ type: 'error', text: err.response?.data?.message || t('teacher.notes.operationFailed') });
       setUploadProgress(0);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this note?')) return;
+    if (!window.confirm(t('teacher.notes.deleteConfirm'))) return;
     try {
       await notesAPI.delete(id);
-      setMessage({ type: 'success', text: 'Note deleted.' });
+      setMessage({ type: 'success', text: t('teacher.notes.noteDeleted') });
       fetchNotes();
     } catch (err) {
-      setMessage({ type: 'error', text: 'Delete failed.' });
+      setMessage({ type: 'error', text: t('teacher.notes.deleteFailed') });
     }
   };
 
@@ -91,19 +93,19 @@ function TeacherNotes() {
   return (
     <div className="container" style={{ paddingTop: 32, paddingBottom: 64 }}>
       <div className="page-header-modern">
-        <h2>My Notes</h2>
+        <h2>{t('teacher.notes.title')}</h2>
         <button className="btn-modern btn-modern-primary" onClick={openCreate}>
-          &#x2795; Upload Note
+          &#x2795; {t('teacher.notes.upload')}
         </button>
       </div>
       {message.text && (<div className={`alert-modern alert-modern-${message.type}`}>{message.text}</div>)}
       {loading ? (
-        <div className="loading-modern">Loading notes...</div>
+        <div className="loading-modern">{t('teacher.notes.loading')}</div>
       ) : notes.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">📄</div>
-          <h3>No notes uploaded</h3>
-          <p>Click "Upload Note" to share your first learning material.</p>
+          <h3>{t('teacher.notes.noNotes')}</h3>
+          <p>{t('teacher.notes.noNotesDesc')}</p>
         </div>
       ) : (
         <div className="notes-grid-modern">
@@ -116,17 +118,17 @@ function TeacherNotes() {
                   <div className="note-meta">{note.subject}</div>
                 </div>
               </div>
-              <div className="note-meta">Uploaded {new Date(note.created_at).toLocaleDateString()}</div>
+              <div className="note-meta">{t('teacher.notes.uploaded')} {new Date(note.created_at).toLocaleDateString()}</div>
               <div className="note-actions" style={{ marginTop: 'auto' }}>
-                <button className="btn-modern btn-modern-warning" style={{ marginRight: 8, padding: '6px 14px', fontSize: 13 }} onClick={() => openEdit(note)}>Edit</button>
-                <button className="btn-modern btn-modern-danger" style={{ padding: '6px 14px', fontSize: 13 }} onClick={() => handleDelete(note.note_id)}>Delete</button>
-                <a href={`${apiBase}${note.file_url}`} className="btn-download" target="_blank" rel="noopener noreferrer">&#x1F4E5; Download</a>
+                <button className="btn-modern btn-modern-warning" style={{ marginRight: 8, padding: '6px 14px', fontSize: 13 }} onClick={() => openEdit(note)}>{t('teacher.notes.editBtn')}</button>
+                <button className="btn-modern btn-modern-danger" style={{ padding: '6px 14px', fontSize: 13 }} onClick={() => handleDelete(note.note_id)}>{t('teacher.notes.deleteBtn')}</button>
+                <a href={`${apiBase}${note.file_url}`} className="btn-download" target="_blank" rel="noopener noreferrer">&#x1F4E5; {t('teacher.notes.download')}</a>
                 <button className="btn-preview" onClick={() => { 
                   setPreviewSrc(`${apiBase}${note.file_url}`); 
                   setPreviewType(note.file_url?.toLowerCase().endsWith('.pdf') ? 'application/pdf' : ''); 
                   setPreviewData({ title: note.title, fileName: note.file_url.split('/').pop() });
                   setPreviewOpen(true); 
-                }}>Preview</button>
+                }}>{t('teacher.notes.preview')}</button>
               </div>
             </div>
           ))}
@@ -136,22 +138,22 @@ function TeacherNotes() {
       {showModal && (
         <div className="modal-overlay-modern" onClick={() => setShowModal(false)}>
           <div className="modal-modern" onClick={(e) => e.stopPropagation()}>
-            <h3>{editing ? 'Edit Note' : 'Upload Note'}</h3>
+            <h3>{editing ? t('teacher.notes.edit') : t('teacher.notes.upload')}</h3>
             <form onSubmit={handleSubmit}>
               <div className="form-group-modern">
-                <label>Title</label>
+                <label>{t('teacher.notes.titleLabel')}</label>
                 <div className="input-wrapper">
-                  <input className="form-control-modern" style={{ paddingLeft: 14 }} type="text" value={form.title} placeholder="Note title" onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+                  <input className="form-control-modern" style={{ paddingLeft: 14 }} type="text" value={form.title} placeholder={t('teacher.notes.titlePlaceholder')} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
                 </div>
               </div>
               <div className="form-group-modern">
-                <label>Subject</label>
+                <label>{t('teacher.notes.subjectLabel')}</label>
                 <div className="input-wrapper">
-                  <input className="form-control-modern" style={{ paddingLeft: 14 }} type="text" value={form.subject} placeholder="e.g. Mathematics, Science" onChange={(e) => setForm({ ...form, subject: e.target.value })} required />
+                  <input className="form-control-modern" style={{ paddingLeft: 14 }} type="text" value={form.subject} placeholder={t('teacher.notes.subjectPlaceholder')} onChange={(e) => setForm({ ...form, subject: e.target.value })} required />
                 </div>
               </div>
               <div className="form-group-modern">
-                <label>File (PDF, DOC, etc.)</label>
+                <label>{t('teacher.notes.fileLabel')}</label>
                 <input className="form-control-modern" style={{ padding: '10px 14px' }} type="file" onChange={(e) => setForm({ ...form, file: e.target.files[0] })} required={!editing} />
               </div>
               {uploadProgress > 0 && (
@@ -161,8 +163,8 @@ function TeacherNotes() {
                 </div>
               )}
               <div className="modal-actions-modern">
-                <button type="button" className="btn-modern" style={{ background: '#f1f5f9', color: '#334155' }} onClick={() => setShowModal(false)}>Cancel</button>
-                <button type="submit" className="btn-modern btn-modern-primary">{editing ? 'Update' : 'Upload'}</button>
+                <button type="button" className="btn-modern" style={{ background: '#f1f5f9', color: '#334155' }} onClick={() => setShowModal(false)}>{t('teacher.notes.cancel')}</button>
+                <button type="submit" className="btn-modern btn-modern-primary">{editing ? t('teacher.notes.update') : t('teacher.notes.uploadBtn')}</button>
               </div>
             </form>
           </div>

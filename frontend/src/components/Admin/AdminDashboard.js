@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { adminAPI, eventsAPI, notesAPI, contactAPI } from '../../services/api';
+import { t } from '../../i18n/i18n';
 
 const hours = new Date().getHours();
-const greeting = hours < 12 ? 'Good Morning' : hours < 18 ? 'Good Afternoon' : 'Good Evening';
+const greeting = hours < 12 ? t('admin.dashboard.greetingMorning') : hours < 18 ? t('admin.dashboard.greetingAfternoon') : t('admin.dashboard.greetingEvening');
 
 const statCards = [
-  { key: 'teachers', icon: '\u{1F393}', label: 'Teachers', color: '#7c3aed', bg: 'rgba(124,58,237,0.1)' },
-  { key: 'events', icon: '\u{1F4C5}', label: 'Events', color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
-  { key: 'notes', icon: '\u{1F4DA}', label: 'Notes', color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
-  { key: 'messages', icon: '\u{1F4EC}', label: 'Messages', color: '#ef4444', bg: 'rgba(239,68,68,0.1)' },
+  { key: 'teachers', icon: '\u{1F393}', label: t('admin.dashboard.teachers'), color: '#0d9488', bg: 'rgba(13,148,136,0.1)' },
+  { key: 'events', icon: '\u{1F4C5}', label: t('admin.dashboard.events'), color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
+  { key: 'notes', icon: '\u{1F4DA}', label: t('admin.dashboard.notes'), color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
+  { key: 'messages', icon: '\u{1F4EC}', label: t('admin.dashboard.messages'), color: '#ef4444', bg: 'rgba(239,68,68,0.1)' },
 ];
 
 const quickActions = [
-  { to: '/admin/teachers', icon: '\u{1F465}', label: 'Manage Teachers', desc: 'Add, edit or remove teachers' },
-  { to: '/admin/events', icon: '\u{1F4C5}', label: 'Manage Events', desc: 'Create and publish school events' },
-  { to: '/admin/announcements', icon: '\u{1F4E2}', label: 'Announcements', desc: 'Post announcements' },
-  { to: '/admin/messages', icon: '\u{1F4ED}', label: 'Messages', desc: 'View contact messages' },
-  { to: '/admin/staff', icon: '\u{1F465}', label: 'Manage Staff', desc: 'Add and manage staff members' },
+  { to: '/admin/teachers', icon: '\u{1F465}', label: t('admin.dashboard.manageTeachers'), desc: t('admin.dashboard.manageTeachersDesc') },
+  { to: '/admin/events', icon: '\u{1F4C5}', label: t('admin.dashboard.manageEvents'), desc: t('admin.dashboard.manageEventsDesc') },
+  { to: '/admin/announcements', icon: '\u{1F4E2}', label: t('admin.dashboard.announcements'), desc: t('admin.dashboard.announcementsDesc') },
+  { to: '/admin/messages', icon: '\u{1F4ED}', label: t('admin.dashboard.messagesLabel'), desc: t('admin.dashboard.messagesDesc') },
+  { to: '/admin/staff', icon: '\u{1F465}', label: t('admin.dashboard.manageStaff'), desc: t('admin.dashboard.manageStaffDesc') },
 ];
 
 function AdminDashboard() {
@@ -55,7 +56,7 @@ function AdminDashboard() {
       <div className="dashboard-header">
         <div className="dashboard-welcome">
           <h1>{greeting}, {user?.full_name || 'Admin'}</h1>
-          <p>Here is what is happening at your school today.</p>
+          <p>{t('admin.dashboard.subtitle')}</p>
         </div>
         <div className="dashboard-date">
           <span className="dash-date-icon">{'\u{1F4C5}'}</span>
@@ -74,7 +75,7 @@ function AdminDashboard() {
               <span className="dash-stat-label">{s.label}</span>
             </div>
             <div className="dash-stat-trend" style={{ background: s.bg, color: s.color }}>
-              {s.key === 'messages' && stats.messages > 0 ? `${stats.messages} unread` : 'View all'}
+              {s.key === 'messages' && stats.messages > 0 ? `${stats.messages} ${t('admin.dashboard.unread')}` : t('admin.dashboard.viewAll')}
             </div>
           </Link>
         ))}
@@ -83,7 +84,7 @@ function AdminDashboard() {
       <div className="dash-two-col">
         <div className="dash-card">
           <div className="dash-card-header">
-            <h3><span className="dash-card-icon">{'\u{26A1}'}</span> Quick Actions</h3>
+            <h3><span className="dash-card-icon">{'\u{26A1}'}</span> {t('admin.dashboard.quickActions')}</h3>
           </div>
           <div className="dash-actions-grid">
             {quickActions.map((a) => (
@@ -100,11 +101,11 @@ function AdminDashboard() {
 
         <div className="dash-card">
           <div className="dash-card-header">
-            <h3><span className="dash-card-icon">{'\u{1F4C5}'}</span> Recent Events</h3>
-            <Link to="/admin/events" className="dash-view-link">View all {'\u2192'}</Link>
+            <h3><span className="dash-card-icon">{'\u{1F4C5}'}</span> {t('admin.dashboard.recentEvents')}</h3>
+            <Link to="/admin/events" className="dash-view-link">{t('admin.dashboard.viewAllLink')} {'\u2192'}</Link>
           </div>
           {recentEvents.length === 0 ? (
-            <div className="dash-empty">No events yet.</div>
+            <div className="dash-empty">{t('admin.dashboard.noEvents')}</div>
           ) : (
             <div className="dash-list">
               {recentEvents.map((event) => (

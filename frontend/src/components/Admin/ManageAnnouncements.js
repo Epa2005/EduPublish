@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { announcementsAPI } from '../../services/api';
+import { t } from '../../i18n/i18n';
 
 function ManageAnnouncements() {
     const [items, setItems] = useState([]);
@@ -16,7 +17,7 @@ function ManageAnnouncements() {
             const res = await announcementsAPI.getAll();
             setItems(res.data);
         } catch (err) {
-            setMessage({ type: 'error', text: 'Failed to fetch announcements.' });
+            setMessage({ type: 'error', text: t('admin.announcements.fetchFailed') });
         } finally {
             setLoading(false);
         }
@@ -32,28 +33,28 @@ function ManageAnnouncements() {
         try {
             if (editing) {
                 await announcementsAPI.update(editing.announcement_id, fd);
-                setMessage({ type: 'success', text: 'Announcement updated.' });
+                setMessage({ type: 'success', text: t('admin.announcements.updated') });
             } else {
                 await announcementsAPI.create(fd);
-                setMessage({ type: 'success', text: 'Announcement created.' });
+                setMessage({ type: 'success', text: t('admin.announcements.created') });
             }
             setShowModal(false);
             setEditing(null);
             setForm({ title: '', body: '', media: null });
             fetchItems();
         } catch (err) {
-            setMessage({ type: 'error', text: err.response?.data?.message || 'Operation failed.' });
+            setMessage({ type: 'error', text: err.response?.data?.message || t('admin.announcements.operationFailed') });
         }
     };
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Delete this announcement?')) return;
+        if (!window.confirm(t('admin.announcements.deleteConfirm'))) return;
         try {
             await announcementsAPI.delete(id);
-            setMessage({ type: 'success', text: 'Announcement deleted.' });
+            setMessage({ type: 'success', text: t('admin.announcements.deleted') });
             fetchItems();
         } catch (err) {
-            setMessage({ type: 'error', text: 'Delete failed.' });
+            setMessage({ type: 'error', text: t('admin.announcements.deleteFailed') });
         }
     };
 
@@ -99,17 +100,17 @@ function ManageAnnouncements() {
     return (
         <div className="container" style={{ paddingTop: 32, paddingBottom: 64 }}>
             <div className="page-header-modern">
-                <h2>Manage Announcements</h2>
-                <button className="btn-modern btn-modern-primary" onClick={openCreate}>&#x2795; Create Announcement</button>
+                <h2>{t('admin.announcements.title')}</h2>
+                <button className="btn-modern btn-modern-primary" onClick={openCreate}>&#x2795; {t('admin.announcements.create')}</button>
             </div>
             {message.text && <div className={`alert-modern alert-modern-${message.type}`}>{message.text}</div>}
             {loading ? (
-                <div className="loading-modern">Loading announcements...</div>
+                <div className="loading-modern">{t('admin.announcements.loading')}</div>
             ) : items.length === 0 ? (
                 <div className="empty-state">
                     <div className="empty-icon">📢</div>
-                    <h3>No announcements</h3>
-                    <p>Create your first announcement to broadcast to the site.</p>
+                    <h3>{t('admin.announcements.noAnnouncements')}</h3>
+                    <p>{t('admin.announcements.noAnnouncementsDesc')}</p>
                 </div>
             ) : (
                 <div className="card-modern">
@@ -131,8 +132,8 @@ function ManageAnnouncements() {
                                 <h3 style={{ margin: 0 }}>{a.title}</h3>
                                 <p style={{ color: '#475569' }}>{a.body}</p>
                                 <div style={{ marginTop: 12 }}>
-                                    <button className="btn-modern btn-modern-warning" style={{ marginRight: 8 }} onClick={() => openEdit(a)}>Edit</button>
-                                    <button className="btn-modern btn-modern-danger" onClick={() => handleDelete(a.announcement_id)}>Delete</button>
+                                    <button className="btn-modern btn-modern-warning" style={{ marginRight: 8 }} onClick={() => openEdit(a)}>{t('admin.announcements.editBtn')}</button>
+                                    <button className="btn-modern btn-modern-danger" onClick={() => handleDelete(a.announcement_id)}>{t('admin.announcements.deleteBtn')}</button>
                                 </div>
                             </div>
                         </div>
@@ -143,25 +144,25 @@ function ManageAnnouncements() {
             {showModal && (
                 <div className="modal-overlay-modern" onClick={() => setShowModal(false)}>
                     <div className="modal-modern" onClick={(e) => e.stopPropagation()}>
-                        <h3>{editing ? 'Edit Announcement' : 'Create Announcement'}</h3>
+                        <h3>{editing ? t('admin.announcements.edit') : t('admin.announcements.create')}</h3>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group-modern">
-                                <label>Title</label>
+                                <label>{t('admin.announcements.titleLabel')}</label>
                                 <div className="input-wrapper">
                                     <input className="form-control-modern" type="text" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
                                 </div>
                             </div>
                             <div className="form-group-modern">
-                                <label>Body</label>
+                                <label>{t('admin.announcements.bodyLabel')}</label>
                                 <textarea className="form-control-modern" style={{ minHeight: 100 }} value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} />
                             </div>
                             <div className="form-group-modern">
-                                <label>Media (image/video)</label>
+                                <label>{t('admin.announcements.mediaLabel')}</label>
                                 <input className="form-control-modern" type="file" accept="image/*,video/*" onChange={(e) => setForm({ ...form, media: e.target.files[0] })} />
                             </div>
                             <div className="modal-actions-modern">
-                                <button type="button" className="btn-modern" onClick={() => setShowModal(false)}>Cancel</button>
-                                <button type="submit" className="btn-modern btn-modern-primary">{editing ? 'Update' : 'Create'}</button>
+                                <button type="button" className="btn-modern" onClick={() => setShowModal(false)}>{t('admin.announcements.cancel')}</button>
+                                <button type="submit" className="btn-modern btn-modern-primary">{editing ? t('admin.announcements.update') : t('admin.announcements.createBtn')}</button>
                             </div>
                         </form>
                     </div>
