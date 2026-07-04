@@ -68,6 +68,9 @@ const mimeTypes = {
   '.rar': 'application/vnd.rar',
 };
 
+// Serve React build files
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   setHeaders: (res, filePath) => {
     const ext = path.extname(filePath).toLowerCase();
@@ -90,6 +93,13 @@ app.use('/api/staff', staffRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'School Activity System API is running.' });
+});
+
+// SPA catch-all: serve index.html for any non-API, non-uploads route
+const buildIndex = path.join(__dirname, '../frontend/build', 'index.html');
+app.get('*', (req, res) => {
+  if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) return;
+  res.sendFile(buildIndex);
 });
 
 app.use((err, req, res, next) => {
