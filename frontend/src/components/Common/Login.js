@@ -58,6 +58,8 @@ function Login() {
 
   return (
     <div className="login-page-modern">
+      <div className="hero-orb hero-orb-1"></div>
+      <div className="hero-orb hero-orb-2"></div>
       <div className="login-container">
         <Link to="/" className="login-back">{t('login.backToHome')}</Link>
         {activeTab === 'admin' && <div style={{ textAlign: 'center', marginBottom: 8 }}><span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>{t('login.defaultHint')}</span></div>}
@@ -67,7 +69,7 @@ function Login() {
             <h1>{t('login.staffPortal')}</h1>
             <p>{t('login.signInDesc')}</p>
           </div>
-          {error && <div className="alert alert-error">{error}</div>}
+          {error && <div className="alert-modern alert-modern-error">{error}</div>}
           <div className="login-tabs-modern">
             <button
               className={`login-tab-modern ${activeTab === 'admin' ? 'active' : ''}`}

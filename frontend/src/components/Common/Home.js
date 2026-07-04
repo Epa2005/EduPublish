@@ -28,6 +28,23 @@ function Home() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [loading]);
+
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -81,7 +98,7 @@ function Home() {
       </section>
 
       {stats.events > 0 || stats.notes > 0 ? (
-        <section className="stats-banner">
+        <section className="stats-banner reveal-on-scroll">
           <div className="container">
             <div className="stats-grid-banner">
               <div className="stat-item">
@@ -105,7 +122,7 @@ function Home() {
         </section>
       ) : null}
 
-      <section className="section-modern" id="events">
+      <section className="section-modern reveal-on-scroll" id="events">
         <div className="container">
           <div className="section-header">
             <span className="section-subtitle">{t('home.whatsHappening')}</span>
@@ -145,7 +162,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="section-modern section-modern-alt" id="notes">
+      <section className="section-modern section-modern-alt reveal-on-scroll" id="notes">
         <div className="container">
           <div className="section-header">
             <span className="section-subtitle">{t('home.studyResources')}</span>
@@ -191,7 +208,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="section-modern">
+      <section className="section-modern reveal-on-scroll">
         <div className="container">
           <div className="section-header">
             <span className="section-subtitle">{t('home.forEveryone')}</span>
@@ -215,7 +232,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="contact-section" style={{ padding: '60px 0' }}>
+      <section className="contact-section reveal-on-scroll" style={{ padding: '60px 0' }}>
         <div className="container">
           <div className="section-header">
             <span className="section-subtitle">{t('home.stayConnected')}</span>

@@ -16,10 +16,10 @@ export default function RootLayout() {
                             <span className="footer-brand">{'\u{1F3EB}'} Upcoming TVT School</span>
                             <p>Upcoming TVT School Activity Publishing and Learning Management System. Connecting Upcoming TVT School, teachers, students, and the community of Bukomane through modern technology.</p>
                             <div className="footer-social">
-                                <a href="#" title="Facebook">f</a>
-                                <a href="#" title="Twitter">{'\u{1D54F}'}</a>
-                                <a href="#" title="LinkedIn">in</a>
-                                <a href="#" title="YouTube">{'\u25B6}'}</a>
+                                <a href="#" title="Facebook">{'\u{1F4F1}'}</a>
+                                <a href="#" title="Twitter">{'\u{1F426}'}</a>
+                                <a href="#" title="LinkedIn">{'\u{1F4E1}'}</a>
+                                <a href="#" title="YouTube">{'\u{1F3AC}'}</a>
                             </div>
                         </div>
                         <div className="footer-col">
